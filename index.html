@@ -32,6 +32,7 @@
       <button>Send2</button>
     </form>
     <label id="label1"></label>
+    <label id="label2"></label>
     <br/>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -39,7 +40,9 @@
     <!--<script src="socket.io.js"></script>-->
 
     <script>
-      var socket = io();
+      //var socket = io();
+      var socket = io.connect();
+      socket.emit('create', 'room1');
 
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
@@ -47,7 +50,9 @@
       var input = document.getElementById('input');
 
       var label1 = document.getElementById('label1');
+      var label2 = document.getElementById('label2');
       label1.textContent = 'cl';
+      label2.textContent = 'room...';
       
       var li1 = document.getElementById('li1');
 
@@ -66,6 +71,12 @@
           input.value = '';
         }
       });
+
+      //var socket = io.connect();
+      //socket.emit('create', 'room1');
+      
+      //io.connect().emit('create', 'room1');
+      //socket.emit('create', 'room1');
 
       socket.on('chat message', function(msg) {
         /*
@@ -95,6 +106,12 @@
         label1.textContent = data.description;
         //label1.appendChild(item3);
       });
+
+      socket.on('connectToRoom',function(data) {
+        label2.textContent = data;
+      });
+
+      socket.leave("room-"+roomno);
     </script>
 </body>
 <!--<script src="/socket.io/socket.io.js"></script>-->

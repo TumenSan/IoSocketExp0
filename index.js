@@ -19,8 +19,15 @@ io.on('connection', (socket) => {
 */
 
 var clients = 0;
+var roomno = 1;
 
 io.on('connection', (socket) => {
+    socket.on('create', function(room) {
+      socket.join("room-"+roomno);//
+      //Send this event to everyone in the room.
+      io.sockets.in("room-"+roomno).emit('connectToRoom', "You are in room no. "+roomno);
+    });
+
     console.log('A user ' + socket.id + ' connected');
     ++clients;
     io.sockets.emit('clients check',{ description: clients + ' clients connected!'});
