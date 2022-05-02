@@ -85,14 +85,15 @@
         window.scrollTo(0, document.body.scrollHeight);
       });
 
-      socket.on('clients check', function(msg) {
+      socket.on('clients check', function(data) {
         //console.log(data.description);
         //label1.textContent = data.description;
-        console.log(msg);
+        console.log(data.description);
         //label1.textContent = msg;
         var item3 = document.createElement('label');
-        item3.textContent = msg;
-        label1.appendChild(item3);
+        item3.textContent = data.description;
+        label1.textContent = data.description;
+        //label1.appendChild(item3);
       });
     </script>
 </body>

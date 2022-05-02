@@ -23,7 +23,8 @@ var clients = 0;
 io.on('connection', (socket) => {
     console.log('A user ' + socket.id + ' connected');
     ++clients;
-    socket.emit('clients check', clients);
+    io.sockets.emit('clients check',{ description: clients + ' clients connected!'});
+    //socket.emit('clients check', clients);
 
     socket.on('chat message', msg => {
       io.emit('chat message', msg);
@@ -40,14 +41,17 @@ io.on('connection', (socket) => {
     });
     */
 
+    /* //
     socket.on('clients check', msg => {
       io.emit('clients check', msg);
     });
+    */
 
     socket.on('disconnect', function () {
       console.log('A user ' + socket.id + ' disconnected');
       --clients;
-      socket.emit('clients check', clients);
+      io.sockets.emit('clients check',{ description: clients + ' clients connected!'});
+      //socket.emit('clients check', clients);
     });
 
    /*
