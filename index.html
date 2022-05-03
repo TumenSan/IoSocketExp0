@@ -43,6 +43,7 @@
       //var socket = io();
       var socket = io.connect();
       socket.emit('create', 'room1');
+      //socket.emit('create', 'room1', {name: userName, userId: socket.id});
 
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
@@ -59,7 +60,7 @@
       form.addEventListener('submit', function(e) {
         e.preventDefault();
         if (input.value) {
-          socket.emit('chat message', input.value);
+          socket.emit('chat message', input.value, 12345);
           input.value = '';
         }
       });

@@ -20,10 +20,30 @@ io.on('connection', (socket) => {
 
 var clients = 0;
 var roomno = 1;
+//var clientsInRoom = [];
+var clientsInRoom1 = 0;
+var clientsInRoom2 = 0;
 
-io.on('connection', (socket) => {
+var userId = [];
+
+io.on('connection', async (socket) => {
+    //userId.push(await fetchUserId(socket));
+    //console.log(userId);
     socket.on('create', function(room) {
+      if (clientsInRoom1 > 1){
+        roomno = 2;
+      }
       socket.join("room-"+roomno);//
+      if (roomno == 1){
+        ++clientsInRoom1;
+      } else {
+        ++clientsInRoom2
+      }
+      
+      var userName = room.name;
+      userId.push(room.userId);
+      
+
       //Send this event to everyone in the room.
       io.sockets.in("room-"+roomno).emit('connectToRoom', "You are in room no. "+roomno);
     });
@@ -33,13 +53,21 @@ io.on('connection', (socket) => {
     io.sockets.emit('clients check',{ description: clients + ' clients connected!'});
     //socket.emit('clients check', clients);
 
+    /*
     socket.on('chat message', msg => {
+      io.emit('chat message', msg);
+      console.log(clients);
+    });
+    */
+    socket.on('chat message', function(msg, socket){
+      console.log(socket);
+      //console.log(socket.id);
       io.emit('chat message', msg);
       console.log(clients);
     });
 
     socket.on('chat message2', msg => {
-      io.emit('chat message2', msg);
+      io.in("room-"+roomno).emit('chat message2', msg);
     });
 
     /*
