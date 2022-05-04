@@ -26,9 +26,16 @@ var clientsInRoom2 = 0;
 
 var userId = [];
 
+users = [];
+connections = [];
+
 io.on('connection', async (socket) => {
     //userId.push(await fetchUserId(socket));
     //console.log(userId);
+    console.log(socket.id);
+    connections.push(socket.id);
+    console.log("! " + connections + " : " + connections.length);
+    
     socket.on('create', function(room) {
       if (clientsInRoom1 > 1){
         roomno = 2;
@@ -45,7 +52,7 @@ io.on('connection', async (socket) => {
       
 
       //Send this event to everyone in the room.
-      io.sockets.in("room-"+roomno).emit('connectToRoom', "You are in room no. "+roomno);
+      io.sockets.in("room-"+roomno).emit('connectToRoom', {description:"You are in room no. "+roomno, usId: socket.id});
     });
 
     console.log('A user ' + socket.id + ' connected');
@@ -83,6 +90,8 @@ io.on('connection', async (socket) => {
     */
 
     socket.on('disconnect', function () {
+      connections.splice(connections.indexOf(socket), 1);
+      console.log("123 " + connections + " 123" + connections.length);
       console.log('A user ' + socket.id + ' disconnected');
       --clients;
       io.sockets.emit('clients check',{ description: clients + ' clients connected!'});

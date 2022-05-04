@@ -31,9 +31,17 @@
     <form id="form2" action="">
       <button>Send2</button>
     </form>
+    <label>peoples</label>
+    <form id="form3" action="">
+
+    </form>
     <label id="label1"></label>
     <label id="label2"></label>
     <br/>
+
+    <ul id="usersList">
+      
+    </ul>
 
     <script src="/socket.io/socket.io.js"></script>
 
@@ -48,6 +56,7 @@
       var messages = document.getElementById('messages');
       var form = document.getElementById('form');
       var form2 = document.getElementById('form2'); //
+      var form3 = document.getElementById('form3');
       var input = document.getElementById('input');
 
       var label1 = document.getElementById('label1');
@@ -56,6 +65,7 @@
       label2.textContent = 'room...';
       
       var li1 = document.getElementById('li1');
+      var usersList = document.getElementById('usersList');
 
       form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -78,6 +88,11 @@
       
       //io.connect().emit('create', 'room1');
       //socket.emit('create', 'room1');
+
+      socket.on('connect', function(){
+        //const sessionID = socket.socket.sessionid; //
+        console.log(socket.id);
+      });
 
       socket.on('chat message', function(msg) {
         /*
@@ -109,7 +124,27 @@
       });
 
       socket.on('connectToRoom',function(data) {
-        label2.textContent = data;
+        /*
+        let formButton = document.createElement('button');
+        formButton.id = socket.id;
+        formButton.textContent = socket.id;
+
+        formButton.onclick = function(){
+
+        }
+
+        form3.append(formButton);
+        */
+
+        console.log(data);
+
+        var li2 = document.createElement('li');
+
+        console.log(data.usId + '1111111111');
+        li2.textContent = data.usId;
+        usersList.append(li2);
+
+        label2.textContent = data.description;
       });
 
       socket.leave("room-"+roomno);
